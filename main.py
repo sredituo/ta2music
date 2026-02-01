@@ -46,7 +46,6 @@ class TubeArchivistAPI:
         try:
             url = f"{self.base_url}/api/video/{ta_video_id}/"
             response = self.session.get(url, timeout=10)
-            # ステータスコードが200以外の場合はエラーを返す
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
@@ -134,7 +133,6 @@ class MusicDownloader:
 
         self._init_database()
 
-        # MP3ダウンロード済みファイル数を取得
         mp3_downloaded_count = self._get_mp3_downloaded_count()
 
         logger.info(f"入力ディレクトリ: {self.ta_dir}")
@@ -216,7 +214,6 @@ class MusicDownloader:
         hash_md5 = hashlib.md5()
         try:
             with open(file_path, 'rb') as f:
-                # ファイルを4KB（4096バイト）ずつ読み込む。空バイト列 b'' が返るまで続ける。
                 for chunk in iter(lambda: f.read(4096), b''):
                     hash_md5.update(chunk)
             return hash_md5.hexdigest()
@@ -236,7 +233,6 @@ class MusicDownloader:
         動画IDはMP4ファイル名（拡張子を除く）から取得
         """
         try:
-            # ファイル名（拡張子を除く）が動画ID
             video_id = video_path.stem
             if video_id:
                 logger.debug(f"ファイル名から動画IDを取得: {video_id}")
@@ -261,7 +257,6 @@ class MusicDownloader:
 
     def _download_mp3_with_thumbnail(self, youtube_id: str, video_title: str | None = None) -> Path | None:
         """yt-dlpでYouTubeからMP3+サムネイルをダウンロード"""
-        # YouTube URLを構築
         youtube_url = f"https://www.youtube.com/watch?v={youtube_id}"
 
         # 出力ファイル名を生成
@@ -304,7 +299,7 @@ class MusicDownloader:
                 capture_output=True,
                 text=True,
                 check=True,
-                timeout=3600  # 1時間のタイムアウト
+                timeout=3600
             )
             logger.info(f"ダウンロード完了: {expected_mp3_path}")
             logger.debug(f"yt-dlp出力: {result.stdout}")
@@ -467,7 +462,6 @@ def main():
     logger.info("ファイル監視を開始しました")
 
     try:
-        # メインループ
         while True:
             import time
             time.sleep(1)
