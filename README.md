@@ -41,6 +41,8 @@ docker run -d \
   -v /path/to/navidrome/music:/music \
   -v /path/to/data:/app/data \
   -v /path/to/logs:/app/logs \
+  -e TA_API_URL=http://tubearchivist.internal \
+  -e TA_TOKEN=your_actual_token_here \
   ta2music:latest
 ```
 

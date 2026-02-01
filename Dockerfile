@@ -17,7 +17,5 @@ RUN mkdir -p /app/logs /app/data
 ENV TUBEARCHIVIST_DIR=/youtube
 ENV NAVIDROME_DIR=/music
 ENV DB_FILE=/app/data/mp3_downloaded.db
-ENV TA_API_URL=http://tubearchivist.internal
-ENV TA_TOKEN=your_token_here
 
 ENTRYPOINT ["python", "main.py"]
