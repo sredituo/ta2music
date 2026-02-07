@@ -12,7 +12,7 @@ import sqlite3
 import re
 import requests
 from pathlib import Path
-from watchdog.observers import Observer
+from watchdog.observers.polling import PollingObserver
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
 logging.basicConfig(
@@ -454,7 +454,7 @@ def main():
 
     # ファイルシステム監視を開始
     event_handler = VideoFileHandler(downloader)
-    observer = Observer()
+    observer = PollingObserver(timeout=10)  # NFS上でも確実に検知するためポーリング方式を使用
     # TubeArchivistの動画ディレクトリを監視ルートに設定
     observer.schedule(event_handler, str(downloader.ta_dir), recursive=True)
     observer.start()
