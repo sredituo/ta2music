@@ -1,7 +1,4 @@
 # ta2music
-
-TubeArchivist to Music - TubeArchivistでダウンロードされた動画を検知し、yt-dlpでMP3形式でダウンロードしてNavidromeなどのミュージックサーバで使用可能にする常駐型アプリケーション
-
 ## 概要
 
 `ta2music`は、TubeArchivistでダウンロードされた動画を監視し、同サービス内でサブスクライブしているプレイリストの中から名前が「MUSIC」で始まるプレイリストに含まれる動画を自動的にMP3形式でダウンロードしてNavidrome等の音楽ライブラリに追加するアプリケーションです。  
@@ -15,9 +12,9 @@ TubeArchivist to Music - TubeArchivistでダウンロードされた動画を検
 - **重複防止**: SQLiteデータベースを使用して、既にMP3ダウンロード済みの動画をスキップ
 - **ファイル名の自動設定**: 動画タイトルを取得して、わかりやすいファイル名で保存（例: `動画タイトル.mp3`）
 
-## 必要な環境
+## 動作要件
 
-- Python 3.11以上
+- Python 3.11+
 - ffmpeg
 - yt-dlp
 - TubeArchivist APIへのアクセス（MUSICプレイリスト判定に必要）
@@ -47,13 +44,17 @@ docker run -d \
 ```
 
 **環境変数**:
-- `TA_API_URL`: TubeArchivist APIのベースURL（例: `http://tubearchivist.internal`）
-- `TA_TOKEN`: TubeArchivist APIの認証トークン
-- `TUBEARCHIVIST_DIR`: TubeArchivistの動画ディレクトリのパス（デフォルト: `/youtube`）
-- `NAVIDROME_DIR`: Navidromeの音楽ディレクトリのパス（デフォルト: `/music`）
-- `DB_FILE`: MP3ダウンロード済み動画を記録するSQLiteデータベースファイルのパス（デフォルト: `/app/data/mp3_downloaded.db`）
+
+| 変数名 | 説明 | デフォルト |
+|---|---|---|
+| `TA_API_URL` | TubeArchivist APIのベースURL（例: `http://tubearchivist.internal`） | — |
+| `TA_TOKEN` | TubeArchivist APIの認証トークン | — |
+| `TUBEARCHIVIST_DIR` | TubeArchivistの動画ディレクトリのパス | `/youtube` |
+| `NAVIDROME_DIR` | Navidromeの音楽ディレクトリのパス | `/music` |
+| `DB_FILE` | MP3ダウンロード済み動画を記録するSQLiteデータベースファイルのパス | `/app/data/mp3_downloaded.db` |
 
 ### Kubernetes
+参考：https://github.com/sredituo/my-home-k8s/tree/main/ta2music
 
 ## 動作の仕組み
 
@@ -72,19 +73,3 @@ docker run -d \
 
 - 標準出力（stdout）
 - `/app/logs/ta2music.log`
-
-## トラブルシューティング
-
-### TubeArchivist APIに接続できない
-
-**解決方法**: 
-- `TA_API_URL`と`TA_TOKEN`が正しく設定されているか確認してください
-- TubeArchivistのAPIが起動しているか確認してください
-- ネットワーク接続（Service名やDNS解決）を確認してください
-
-### MP3ダウンロードが失敗する
-
-**解決方法**:
-- yt-dlpが最新バージョンであることを確認してください
-- インターネット接続を確認してください
-- ログファイルで詳細なエラーメッセージを確認してください
